@@ -59,3 +59,14 @@ export const loginUser = async (req, res) => {
     res.status(400).json({ success: false, message: "Failed to login user, Try again", error: error.message });
   }
 };
+
+// Get User data using Token (JWT)
+
+export const getUserData = async (req, res) => {
+  try {
+    const { user } = req;
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};

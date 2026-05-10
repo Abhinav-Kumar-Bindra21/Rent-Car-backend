@@ -16,7 +16,7 @@ const userSchema = new Schema(
     },
 
     password: {
-      tpye: String,
+      type: String,
       required: true,
     },
 
