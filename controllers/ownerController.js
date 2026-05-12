@@ -52,6 +52,40 @@ export const addCar = async (req, res) => {
 
     res.status(200).json({ success: true, message: "Car Added" });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+// API to list owner Cars
+
+export const getOwnerCars = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const cars = await Car.find({ owner: _id });
+    res.status(200).json({ success: true, message: "Owner cars", cars });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+// API to toggle car availability
+
+export const toggleCarAvailability = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { carId } = req.body;
+    const car = await Car.findById(carId);
+
+    //checking is car belongs to the car
+    if (car.owner.toString() !== _id.toString()) {
+      return res.status(400).json({ success: false, message: "Unauthorized" });
+    }
+
+    car.isAvaliable = !car.isAvaliable;
+    await car.save();
+
+    res.status(200).json({ success: true, message: "Availability Toggled" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
   }
 };
