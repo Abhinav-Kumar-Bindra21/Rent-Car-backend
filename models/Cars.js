@@ -25,7 +25,7 @@ const carSchema = new Schema(
     },
 
     year: {
-      type: number,
+      type: Number,
       required: true,
     },
 
