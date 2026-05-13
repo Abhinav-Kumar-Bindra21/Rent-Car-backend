@@ -88,3 +88,41 @@ export const toggleCarAvailability = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+//API to delete car
+export const deleteCar = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const { carId } = req.body;
+    const car = await Car.findById(carId);
+
+    //checking is car belongs to the car
+    if (car.owner.toString() !== _id.toString()) {
+      return res.status(400).json({ success: false, message: "Unauthorized" });
+    }
+
+    car.owner = null;
+    car.isAvaliable = false;
+
+    await car.save();
+
+    res.status(200).json({ success: true, message: "Car is deleted !!" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+//API to get dashboard Data
+export const getDashboardData = async (req, res) => {
+  try {
+    const { _id, role } = req.body;
+
+    if (role !== "owner") {
+      return res.status(400).json({ success: false, message: "Unauthorized" });
+    }
+
+    const cars = await Car.find({ owner: _id });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
