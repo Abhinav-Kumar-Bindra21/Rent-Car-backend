@@ -2,6 +2,7 @@ import imagekit from "../configs/imageKit.js";
 import User from "../models/User.js";
 import Car from "../models/Cars.js";
 import fs from "fs";
+import Booking from "../models/Booking.js";
 
 // API to change role
 export const changeRoleToOwner = async (req, res) => {
@@ -122,6 +123,28 @@ export const getDashboardData = async (req, res) => {
     }
 
     const cars = await Car.find({ owner: _id });
+    const bookings = await Booking.find({ owner: _id }).populate("car").sort({ createdAt: -1 });
+
+    const pendingBookings = await Booking.find({ owner: _id, status: "pending" });
+    const completedBookings = await Booking.find({ owner: _id, status: "confirmed" });
+
+    // Calculate monthlyRevenue from boookings where status is confirmed
+
+    const monthlyRevenue = bookings
+      .slice()
+      .filter((booking) => booking.status === "confirmed")
+      .reduce((acc, booking) => acc + booking.price, 0);
+
+    const dashboardData = {
+      totalCars: cars.length,
+      totalBookings: bookings.length,
+      pendingBookings: pendingBookings.length,
+      completedBookings: completedBookings.length,
+      recentBookings: bookings.slice(0, 3),
+      monthlyRevenue,
+    };
+
+    res.status(200).json({ success: true, dashboardData });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
