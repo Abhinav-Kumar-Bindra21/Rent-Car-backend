@@ -1,4 +1,3 @@
-import { URLEndpoints } from "@imagekit/nodejs/resources/accounts/url-endpoints.mjs";
 import imagekit from "../configs/imageKit.js";
 import User from "../models/User.js";
 import Car from "../models/Cars.js";
@@ -29,12 +28,12 @@ export const addCar = async (req, res) => {
     const fileBuffer = fs.readFileSync(imageFile.path);
     const response = await imagekit.upload({
       file: fileBuffer,
-      fileName: imageFile.originalName,
+      fileName: imageFile.originalname,
       folder: "/cars",
     });
 
     // optimization through imagekit URL transformation
-    var optimizedImageURL = imagekit.baseURL({
+    var optimizedImageURL = imagekit.url({
       path: response.filePath,
 
       transformation: [
