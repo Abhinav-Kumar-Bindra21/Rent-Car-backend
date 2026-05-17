@@ -65,10 +65,15 @@ export const loginUser = async (req, res) => {
 
 export const getUserData = async (req, res) => {
   try {
-    const { user } = req;
-    res.status(200).json({ success: true, user });
+    res.status(200).json({
+      success: true,
+      user: req.user,
+    });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
