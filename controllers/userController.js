@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "./generateToken.js";
+import Car from "../models/Cars.js";
 
 // Register User
 export const registerUser = async (req, res) => {
@@ -66,6 +67,17 @@ export const getUserData = async (req, res) => {
   try {
     const { user } = req;
     res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+// Get all cars for the Frontend
+
+export const getCars = async (req, res) => {
+  try {
+    const cars = await Car.find({ isAvaliable: true });
+    res.status(200).json({ success: true, cars });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
