@@ -154,7 +154,7 @@ export const getDashboardData = async (req, res) => {
 
 export const updateUserImage = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const { _id } = req.user;
 
     const imageFile = req.file;
 
@@ -182,7 +182,7 @@ export const updateUserImage = async (req, res) => {
 
     const image = optimizedImageURL;
 
-    await User.findByIdAndDelete(_id, { image });
+    await User.findByIdAndUpdate(_id, { image }, { new: true });
     res.status(200).json({ success: true, message: "Image updated" });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
