@@ -64,8 +64,8 @@ const carSchema = new Schema(
       required: true,
     },
 
-    isAvaliable: {
-      type: String,
+    isAvailable: {
+      type: Boolean,
       default: true,
     },
   },

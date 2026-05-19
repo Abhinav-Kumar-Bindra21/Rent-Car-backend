@@ -81,7 +81,7 @@ export const toggleCarAvailability = async (req, res) => {
       return res.status(400).json({ success: false, message: "Unauthorized" });
     }
 
-    car.isAvaliable = !car.isAvaliable;
+    car.isAvailable = !car.isAvailable;
     await car.save();
 
     res.status(200).json({ success: true, message: "Availability Toggled" });
@@ -116,7 +116,7 @@ export const deleteCar = async (req, res) => {
 //API to get dashboard Data
 export const getDashboardData = async (req, res) => {
   try {
-    const { _id, role } = req.body;
+    const { _id, role } = req.user;
 
     if (role !== "owner") {
       return res.status(400).json({ success: false, message: "Unauthorized" });
