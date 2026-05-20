@@ -5,7 +5,7 @@ const bookingSchema = new Schema(
   {
     car: {
       type: Schema.Types.ObjectId,
-      ref: "Cars",
+      ref: "Car",
       required: true,
     },
 
