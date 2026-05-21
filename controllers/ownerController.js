@@ -7,11 +7,21 @@ import Booking from "../models/Booking.js";
 // API to change role
 export const changeRoleToOwner = async (req, res) => {
   try {
-    const { _id } = req.user;
-    await User.findByIdAndUpdate(_id, { role: "owner" });
-    res.status(200).json({ success: true, message: "Now you can list cars" });
+    const { userId } = req.body;
+
+    await User.findByIdAndUpdate(userId, {
+      role: "owner",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "User promoted to owner",
+    });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    res.json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -19,7 +29,15 @@ export const changeRoleToOwner = async (req, res) => {
 
 export const addCar = async (req, res) => {
   try {
-    const { _id } = req.user;
+    const { _id, role } = req.user;
+
+    // CHECK OWNER ROLE
+    if (role !== "owner") {
+      return res.status(403).json({
+        success: false,
+        message: "Only owners can add cars",
+      });
+    }
 
     let car = JSON.parse(req.body.carData);
 
