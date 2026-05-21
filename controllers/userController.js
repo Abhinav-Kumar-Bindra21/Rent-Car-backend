@@ -2,10 +2,12 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "./generateToken.js";
 import Car from "../models/Cars.js";
+import { validate } from "../utils/validator.js";
 
 // Register User
 export const registerUser = async (req, res) => {
   try {
+    validate(req.body);
     const { username, email, password } = req.body;
 
     if (!username || !email || !password || password.length < 8) {
@@ -29,7 +31,7 @@ export const registerUser = async (req, res) => {
 
     res.status(200).json({ success: true, message: "User register successfully", token });
   } catch (error) {
-    res.status(400).json({ success: false, message: "Failed to register user, Try again", error: error.message });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
